@@ -29,10 +29,7 @@ export class PipeSpawner extends Component {
         // Instantiate the pipe prefab
         const newPipe = instantiate(this.pipePrefab);
 
-        // Set the new pipe's position to the spawner node's position
-        newPipe.setPosition(this.node.position);
-
-        // Add the new pipe to the scene
-        this.node.parent?.addChild(newPipe);
+        // Add the new pipe as a child of the PipeSpawner node
+        this.node.addChild(newPipe);
     }
 }

@@ -1,32 +1,31 @@
-// PipeController.ts
-
-import { _decorator, Component, Node, Vec2, RigidBody2D } from 'cc';
-
+import { _decorator, Component, Node, RigidBody2D, Vec2 } from 'cc';
 const { ccclass, property } = _decorator;
 
-@ccclass('TrapMover')
-export class TrapMover extends Component {
+@ccclass('PipeMovement')
+export class PipeMovement extends Component {
     @property
-    public minVelocity: number = 100;
+    velocity: number = -100; // Set the velocity of the pipes (negative for moving left)
 
     @property
-    public maxVelocity: number = 200;
+    destroyX: number = -700; // The x-coordinate at which the pipe should be destroyed
 
-    @property
-    public deadAreaX: number = -1000;
-
-    private _velocity: number = 0;
-    private _rigidBody: RigidBody2D = null;
+    private _rigidBody: RigidBody2D | null = null;
 
     start() {
+        // Get the RigidBody2D component attached to the node
         this._rigidBody = this.getComponent(RigidBody2D);
-        this._velocity = Math.random() * (this.maxVelocity - this.minVelocity) + this.minVelocity;
-        this._rigidBody.linearVelocity = new Vec3(-this._velocity, 0, 0);
+
+        if (this._rigidBody) {
+            // Set the horizontal velocity of the RigidBody2D component
+            this._rigidBody.linearVelocity = new Vec2(this.velocity, 0);
+        } else {
+            console.error('RigidBody2D component is missing on the pipe node.');
+        }
     }
 
-    update(deltaTime: number) {
-        const position = this.node.getPosition();
-        if (position.x <= this.deadAreaX) {
+    update() {
+        if (this.node.position.x <= this.destroyX) {
+            // Destroy the pipe node when it reaches the specified x-coordinate
             this.node.destroy();
         }
     }

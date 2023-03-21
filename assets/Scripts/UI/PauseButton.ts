@@ -33,7 +33,7 @@ export class PauseButton extends Component {
     }
 
     onPauseButtonClick() {
-        director.pause();
+        // director.pause();
         this.popupWidget.node.active = true;
         // this.gameCanvasWidget.node.opacity = 128; // Set opacity to 128 for a blurred effect
     }
